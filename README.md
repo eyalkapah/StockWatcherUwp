@@ -1,0 +1,2 @@
+# StockWatcherUwp
+UWP Application
