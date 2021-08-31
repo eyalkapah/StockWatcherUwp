@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="LightGray">#D3D3D3</Color>
+    <Color x:Key="GrayColor">#EFEFEF</Color>
+    <Color x:Key="ConfirmationYellow">#F4C41B</Color>
+    <Color x:Key="Red">Red</Color>
+    <Color x:Key="DarkRed">DarkRed</Color>
+    <Color x:Key="IndianRed">IndianRed</Color>
+    <Color x:Key="UpGreenColor">#44B2A8</Color>
+    <Color x:Key="DownRedColor">#F44336</Color>
+    <Color x:Key="VeryLightGray">#F0F3FA</Color>
+    <Color x:Key="MouseGray">#D1D4DC</Color>
+    <Color x:Key="WhiteColor">White</Color>
+    <Color x:Key="CustomBlackColor">#010409</Color>
+    <Color x:Key="LightWhiteColor">#F0F6FC</Color>
+    <Color x:Key="LightBlackColor">#161B22</Color>
+    <Color x:Key="MediumBlackColor">#30363D</Color>
+    <Color x:Key="DarkBlackColor">#20252B</Color>
+    <Color x:Key="MediumGreenColor">#2EA44F</Color>
+    <Color x:Key="LightPurpleColor">#8166DD</Color>
+    <Color x:Key="LightBlueColor">#58A6FF</Color>
+    <Color x:Key="LightGrayWhiteColor">#C3D1CC</Color>
+    <Color x:Key="MediumGrayWhiteColor">#8B949E</Color>
+
+
+
+</ResourceDictionary>
