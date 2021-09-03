@@ -20,8 +20,6 @@ namespace StockWatcher
             this.InitializeComponent();
 
             DataContext = Ioc.Default.GetService<ShellViewModel>();
-
-            this.Loaded += OnLoaded;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -31,8 +29,6 @@ namespace StockWatcher
             if (navigationService != null)
             {
                 navigationService.SetInnerFrame(ContentFrame);
-
-                navigationService.NavigateToLogin();
             }
         }
     }

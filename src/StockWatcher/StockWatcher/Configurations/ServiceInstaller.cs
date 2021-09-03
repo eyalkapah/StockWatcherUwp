@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.IO;
+using Windows.Storage;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StockWatcher.Models.Settings;
 using StockWatcher.Services;
@@ -9,9 +11,17 @@ namespace StockWatcher.Configurations
 {
     public static class ServiceInstaller
     {
+        private static readonly LogService LogService;
+
+        static ServiceInstaller()
+        {
+            LogService = new LogService();
+        }
+
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             return services.AddSingleton<ITextService, TextService>()
+                .AddSingleton<ILogService>(LogService)
                 .AddSingleton<INavigationService, NavigationService>()
                 .AddSingleton<IDbService, DbService>();
         }

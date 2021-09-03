@@ -26,5 +26,7 @@ namespace StockWatcher
         {
             this.InitializeComponent();
         }
+
+
     }
 }

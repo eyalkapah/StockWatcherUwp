@@ -1,69 +1,84 @@
 ﻿using System;
-using StockWatcher.Services.Interfaces;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using StockWatcher.Pages;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using StockWatcher.Common.Exceptions;
+using StockWatcher.Services.Interfaces;
+using StockWatcher.ViewModels.ViewModels;
 
 namespace StockWatcher.Services
 {
     public class NavigationService : INavigationService
     {
         private Frame _frame;
-        private Frame _contentFrame;
+        private Frame _innerFrame;
 
-        public void SetFrame(object frame)
+        /// <summary>
+        ///     Holds pair of TViewModel, TView mapping
+        /// </summary>
+        private static readonly ConcurrentDictionary<Type, Type> ViewModelToViewMap = new();
+
+        public Frame Frame => _frame ??= Window.Current.Content as Frame;
+
+        public Task NavigateAsync<T>(object parameter)
         {
-            _frame = frame as Frame;
-        }
-
-        public void NavigateToLogin()
-        {
-            var loginPage = new LoginPage();
-
-            Navigate(loginPage);
-        }
-
-        public void NavigateToCreateAccount()
-        {
-            //var createAccountPage = new CreateAccountPage();
-
-            //Navigate(createAccountPage);
-        }
-
-        public void NavigateToMain()
-        {
-            var mainPage = new MainPage();
-
-            Navigate(mainPage);
+            return NavigateInternalAsync(typeof(T), parameter);
         }
 
 
         public void NavigateBack()
         {
-            if (_contentFrame is not { CanGoBack: true }) 
+            if (_innerFrame is not { CanGoBack: true })
             {
                 if (_frame is { CanGoBack: true })
                     _frame.GoBack();
             }
             else
             {
-                if (_contentFrame.CanGoBack)
-                    _contentFrame.GoBack();
+                if (_innerFrame.CanGoBack)
+                    _innerFrame.GoBack();
             }
         }
 
         public void SetInnerFrame(object contentFrame)
         {
-            _contentFrame = contentFrame as Frame;
+            _innerFrame = contentFrame as Frame;
         }
 
-        private void Navigate(Page page)
+        public static void Register<TViewModel, TView>()
         {
-            if (_frame == null)
-                return;
+            ViewModelToViewMap.TryAdd(typeof(TViewModel), typeof(TView));
+        }
 
-            if (_frame.Navigate(page.GetType()))
+        private async Task NavigateInternalAsync(Type viewModelType, object parameter = null)
+        {
+            var pageType = GetView(viewModelType);
+
+            var viewModel = Ioc.Default.GetService(viewModelType);
+
+            var frame = _innerFrame ?? Frame;
+
+            if (frame.DataContext is NavigationAwareViewModel currentViewModel)
+                await currentViewModel.OnNavigatedFrom();
+
+            frame.DataContext = viewModel;
+
+            frame.Navigate(pageType, parameter);
+
+            if (viewModel is NavigationAwareViewModel newViewModel) await newViewModel.OnNavigatedTo(parameter);
+        }
+
+        private static Type GetView(Type viewModelType)
+        {
+            try
             {
-
+                return ViewModelToViewMap[viewModelType];
+            }
+            catch (Exception e)
+            {
+                throw new ViewModelResolveException(viewModelType, e);
             }
         }
     }

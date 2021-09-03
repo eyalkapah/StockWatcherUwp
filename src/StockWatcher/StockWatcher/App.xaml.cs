@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
+using StockWatcher.Configurations;
+using StockWatcher.ViewModels.Helpers;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -6,11 +11,6 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.DependencyInjection;
-using StockWatcher.Configurations;
-using StockWatcher.Services.Interfaces;
 
 namespace StockWatcher
 {
@@ -26,17 +26,20 @@ namespace StockWatcher
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.PreferredLaunchViewSize = new Size(1280, 840);
 
-            BuildConfiguration();
+            Configuration = BuildConfiguration();
 
-            ConfigureServices();
+            var services = new ServiceCollection();
+
+            ConfigureServices(services);
+
 
             this.Suspending += OnSuspending;
         }
 
 
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            if (!(Window.Current.Content is Frame rootFrame))
+            if (Window.Current.Content is not Frame rootFrame)
             {
                 rootFrame = new Frame();
 
@@ -49,8 +52,6 @@ namespace StockWatcher
 
                 Window.Current.Content = rootFrame;
 
-                RegisterApplicationRootFrame(rootFrame);
-
                 RegisterEvents();
             }
 
@@ -58,37 +59,28 @@ namespace StockWatcher
             {
                 if (rootFrame.Content == null)
                 {
-
-                    rootFrame.Navigate(typeof(ShellPage), e.Arguments);
+                    await NavigationHelper.NavigateToDefaultPageAsync();
+                    //rootFrame.Navigate(typeof(ShellPage), e.Arguments);
                 }
 
                 Window.Current.Activate();
             }
         }
 
-        private void RegisterApplicationRootFrame(Frame rootFrame)
-        {
-            var navigationService = Ioc.Default.GetService<INavigationService>();
-
-            navigationService?.SetFrame(rootFrame);
-        }
-
         private void RegisterEvents()
         {
         }
 
-        private void ConfigureServices()
+        private void ConfigureServices(IServiceCollection services)
         {
-            var services = new ServiceCollection();
-
             services.ConfigureServices();
 
-            //services.ConfigureConditionalServices(Configuration);
+            services.ConfigureConditionalServices(Configuration);
 
             services.ConfigureViewModels();
 
             services.ConfigureApplicationSettings(Configuration);
-
+            
             services.ConfigureDb(Configuration, "StockWatcher");
 
             var provider = services.BuildServiceProvider();
@@ -96,7 +88,8 @@ namespace StockWatcher
             Ioc.Default.ConfigureServices(provider);
         }
 
-        private void BuildConfiguration()
+     
+        private static IConfiguration BuildConfiguration()
         {
             var builder = new ConfigurationBuilder();
 
@@ -106,8 +99,9 @@ namespace StockWatcher
             builder.AddJsonFile("appSettings.json", false);
 #endif
 
-            Configuration = builder.Build();
+            return builder.Build();
         }
+
 
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
