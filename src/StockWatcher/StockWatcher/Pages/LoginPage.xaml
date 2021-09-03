@@ -1,0 +1,58 @@
+﻿<Page
+    x:Class="StockWatcher.Pages.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:StockWatcher.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Border x:Name="background">
+                    <Image
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0.9"
+                        Source="{StaticResource BackgroundLoginImage}"
+                        Stretch="UniformToFill" />
+                </Border>
+            </Grid>
+
+            <TextBox
+                Grid.RowSpan="2"
+                GotFocus="OnBackgroundFocus"
+                Opacity="0" />
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    x:Name="foreground"
+                    Grid.Row="1"
+                    VerticalAlignment="Center">
+                    <Grid GotFocus="OnForegroundFocus">
+                        <!--<views:NamePasswordControl
+                            x:Name="passwordView"
+                            HorizontalAlignment="Center"
+                            IsEnabled="{x:Bind ViewModel.IsBusy, Converter={StaticResource BoolNegationConverter}}"
+                            LoginWithPasswordCommand="{x:Bind ViewModel.LoginWithPasswordCommand}"
+                            Password="{x:Bind ViewModel.Password}"
+                            UserName="{x:Bind ViewModel.UserName, Mode=TwoWay}"
+                            Visibility="{x:Bind ViewModel.IsLoginWithPassword, Mode=OneWay}" />-->
+
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

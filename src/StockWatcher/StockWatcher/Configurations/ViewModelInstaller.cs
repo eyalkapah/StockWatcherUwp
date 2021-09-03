@@ -9,6 +9,7 @@ namespace StockWatcher.Configurations
         {
             return services
                 .AddTransient<MainViewModel>()
+                .AddTransient<LoginViewModel>()
                 .AddTransient<ShellViewModel>();
         }
 

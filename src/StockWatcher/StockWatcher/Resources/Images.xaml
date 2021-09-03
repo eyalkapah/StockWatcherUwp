@@ -1,3 +1,4 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--<BitmapImage x:Key="SyncImage" UriSource="../Assets/Images/sync.png" />-->
+    <BitmapImage x:Key="BackgroundLoginImage" UriSource="../Assets/Images/stock_background.jpg" />
 </ResourceDictionary>

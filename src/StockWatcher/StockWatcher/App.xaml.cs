@@ -1,6 +1,8 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using StockWatcher.Configurations;
+using StockWatcher.Services.Interfaces;
 
 namespace StockWatcher
 {
@@ -19,6 +22,14 @@ namespace StockWatcher
         public App()
         {
             this.InitializeComponent();
+
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            ApplicationView.PreferredLaunchViewSize = new Size(1280, 840);
+
+            BuildConfiguration();
+
+            ConfigureServices();
+
             this.Suspending += OnSuspending;
         }
 
@@ -38,9 +49,7 @@ namespace StockWatcher
 
                 Window.Current.Content = rootFrame;
 
-                BuildConfiguration();
-
-                ConfigureServices();
+                RegisterApplicationRootFrame(rootFrame);
 
                 RegisterEvents();
             }
@@ -57,6 +66,13 @@ namespace StockWatcher
             }
         }
 
+        private void RegisterApplicationRootFrame(Frame rootFrame)
+        {
+            var navigationService = Ioc.Default.GetService<INavigationService>();
+
+            navigationService?.SetFrame(rootFrame);
+        }
+
         private void RegisterEvents()
         {
         }
@@ -67,7 +83,7 @@ namespace StockWatcher
 
             services.ConfigureServices();
 
-            services.ConfigureConditionalServices(Configuration);
+            //services.ConfigureConditionalServices(Configuration);
 
             services.ConfigureViewModels();
 

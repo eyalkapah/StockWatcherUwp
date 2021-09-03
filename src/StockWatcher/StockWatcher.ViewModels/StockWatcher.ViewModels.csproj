@@ -9,4 +9,8 @@
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.0-rc1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\StockWatcher.Services\StockWatcher.Services.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StockWatcher.Models.Settings;
+using StockWatcher.Services;
 using StockWatcher.Services.Interfaces;
 using StockWatcher.Services.Services;
 
@@ -11,6 +12,7 @@ namespace StockWatcher.Configurations
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             return services.AddSingleton<ITextService, TextService>()
+                .AddSingleton<INavigationService, NavigationService>()
                 .AddSingleton<IDbService, DbService>();
         }
 
